@@ -59,6 +59,12 @@
 			"style": {
 				"navigationBarTitleText": "视频通话"
 			}
+		},
+		{
+			"path": "pages/room/room",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {

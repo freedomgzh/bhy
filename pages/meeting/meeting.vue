@@ -304,7 +304,7 @@
 			    this.checkDeviceAuthorize().then((result)=>{
 			      console.log('授权成功', result)
 			      console.log('navigateTo', url)
-			      wx.navigateTo({ url: url })
+			      uni.navigateTo({ url: url })
 			    }).catch((error)=>{
 			      console.log('没有授权', error)
 			    })
