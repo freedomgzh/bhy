@@ -1,7 +1,22 @@
+
 <script>
+	import Vue from 'vue'
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			  const { model, system, statusBarHeight } = uni.getSystemInfoSync()
+			    let headHeight
+			    if (/iphone\s{0,}x/i.test(model)) {
+			      headHeight = 88
+			    } else if (system.indexOf('Android') !== -1) {
+			      headHeight = 68
+			    } else {
+			      headHeight = 64
+			    } 
+				Vue.prototype.$headerHeight  = headHeight
+				Vue.prototype.$statusBarHeight  = statusBarHeight
+			 //    Vue.prototype.$headerHeight = headHeight
+				// Vue.prototype.$statusBarHeight = statusBarHeight
 		},
 		onShow: function() {
 			console.log('App Show')

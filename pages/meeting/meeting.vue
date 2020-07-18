@@ -99,6 +99,9 @@
 </template>
 
 <script>
+	import Vue from 'vue'
+	const headerHeight = Vue.prototype.$headerHeight;
+	const statusBarHeight =Vue.prototype.$statusBarHeight;
 	export default{
 		data(){
 			return{
@@ -164,22 +167,25 @@
 				  { value: 'HD', title: 'HD' },
 				  { value: 'SD', title: 'SD' },
 				],
-				headerHeight: app.globalData.headerHeight,
-				statusBarHeight: app.globalData.statusBarHeight,
+				
 				top: `padding-top:${(headerHeight + statusBarHeight)/2 - 12}px`,
 			}
 		},
 		methods:{
 			enterHandler: function(event) {
+				
 			  const key = event.currentTarget.dataset.key
 			  const data = {}
 			  data[key] = event.detail.value
+			  console.log('event===============',data,key,event)
 			  if ('roomID' === key) {
 			    data[key] = data[key].replace(/[^A-Za-z0-9]/g, '')
 			  }
-			  this.setData(data, () => {
-			    console.log(`set ${key}:`, data[key])
-			  })
+			  this[key] = data[key]
+			  console.log(`set ${key}:`, data[key])
+			  // this.setData(data, () => {
+			  //   console.log(`set ${key}:`, data[key])
+			  // })
 			},
 			
 			switchHandler: function(event) {
@@ -189,9 +195,10 @@
 			  if (key === 'enableBlackStream') {
 			    data[key] = data[key] === false ? 0 : 1
 			  }
-			  this.setData(data, () => {
-			    console.log(`set ${key}:`, data[key])
-			  })
+			  this[key] = data[key];
+			  // this.setData(data, () => {
+			  //   console.log(`set ${key}:`, data[key])
+			  // })
 			},
 			
 			selectHandler: function(event) {
@@ -202,7 +209,7 @@
 			  // this.setData(data, () => {
 			    console.log(`set ${key}:`, data[key])
 			    if ('resolution' === key) {
-			      switch (this.data.resolution) {
+			      switch (this.resolution) {
 			        case 'FHD':
 			        
 					   this.videoWidth= 720
@@ -240,37 +247,37 @@
 			    return
 			  }
 			
-			  const url = `../room/room?roomID=${this.data.roomID}` +
-			              `&template=${this.data.template}` +
-			              `&debugMode=${this.data.debugMode}` +
-			              `&localVideo=${this.data.localVideo}` +
-			              `&localAudio=${this.data.localAudio}` +
-			              `&enableEarMonitor=${this.data.enableEarMonitor}` +
-			              `&enableAutoFocus=${this.data.enableAutoFocus}` +
-			              `&localMirror=${this.data.localMirror}` +
-			              `&enableAgc=${this.data.enableAgc}` +
-			              `&enableAns=${this.data.enableAns}` +
-			              `&frontCamera=${this.data.frontCamera}` +
-			              `&audioVolumeType=${this.data.audioVolumeType}` +
-			              `&audioQuality=${this.data.audioQuality}` +
-			              `&videoWidth=${this.data.videoWidth}` +
-			              `&videoHeight=${this.data.videoHeight}` +
-			              `&userID=${this.data.userID}` +
-			              `&minBitrate=${this.data.minBitrate}` +
-			              `&maxBitrate=${this.data.maxBitrate}` +
+			  const url = `../room/room?roomID=${this.roomID}` +
+			              `&template=${this.template}` +
+			              `&debugMode=${this.debugMode}` +
+			              `&localVideo=${this.localVideo}` +
+			              `&localAudio=${this.localAudio}` +
+			              `&enableEarMonitor=${this.enableEarMonitor}` +
+			              `&enableAutoFocus=${this.enableAutoFocus}` +
+			              `&localMirror=${this.localMirror}` +
+			              `&enableAgc=${this.enableAgc}` +
+			              `&enableAns=${this.enableAns}` +
+			              `&frontCamera=${this.frontCamera}` +
+			              `&audioVolumeType=${this.audioVolumeType}` +
+			              `&audioQuality=${this.audioQuality}` +
+			              `&videoWidth=${this.videoWidth}` +
+			              `&videoHeight=${this.videoHeight}` +
+			              `&userID=${this.userID}` +
+			              `&minBitrate=${this.minBitrate}` +
+			              `&maxBitrate=${this.maxBitrate}` +
 			              // pusher URL 参数
-			              `&encsmall=${this.data.encsmall}` +
-			              `&scene=${this.data.scene}` +
-			              `&cloudenv=${this.data.cloudenv}` +
-			              `&enableBlackStream=${this.data.enableBlackStream}` +
-			              `&streamID=${this.data.streamID}` +
-			              `&userDefineRecordID=${this.data.userDefineRecordID}` +
-			              `&privateMapKey=${this.data.privateMapKey}` +
-			              `&pureAudioMode=${this.data.pureAudioMode}` +
-			              `&recvMode=${this.data.recvMode}` +
+			              `&encsmall=${this.encsmall}` +
+			              `&scene=${this.scene}` +
+			              `&cloudenv=${this.cloudenv}` +
+			              `&enableBlackStream=${this.enableBlackStream}` +
+			              `&streamID=${this.streamID}` +
+			              `&userDefineRecordID=${this.userDefineRecordID}` +
+			              `&privateMapKey=${this.privateMapKey}` +
+			              `&pureAudioMode=${this.pureAudioMode}` +
+			              `&recvMode=${this.recvMode}` +
 			              // player参数
-			              `&enableRecvMessage=${this.data.enableRecvMessage}`
-			  if (!this.data.roomID) {
+			              `&enableRecvMessage=${this.enableRecvMessage}`
+			  if (!this.roomID) {
 			    wx.showToast({
 			      title: '请输入房间号',
 			      icon: 'none',
@@ -278,7 +285,7 @@
 			    })
 			    return
 			  }
-			  if (!this.data.userID) {
+			  if (!this.userID) {
 			    wx.showToast({
 			      title: '请输入用户名',
 			      icon: 'none',
@@ -287,7 +294,7 @@
 			    return
 			  }
 			  const reg = /^[0-9a-zA-Z]*$/
-			  if (this.data.userID.match(reg) === null) {
+			  if (this.userID.match(reg) === null) {
 			    wx.showToast({
 			      icon: 'none',
 			      title: '用户名为英文加数字',
@@ -385,10 +392,11 @@
 			  })
 			},
 			randomUserID: function() {
-			  this.setData({
-			    // roomID: parseInt(10000 * Math.random()),
-			    userID: new Date().getTime().toString(16).split('').reverse().join(''),
-			  })
+				this.userID = new Date().getTime().toString(16).split('').reverse().join('')
+			  // this.setData({
+			  //   // roomID: parseInt(10000 * Math.random()),
+			  //   userID: new Date().getTime().toString(16).split('').reverse().join(''),
+			  // })
 			},
 		},
 		onLoad: function(options) {
