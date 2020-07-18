@@ -22,7 +22,9 @@
 				</view>
 			</view>
 		</view>
-
+		<view class="btnsubmit" @tap="freeTell">
+			提交
+		</view>
 	</view>
 </template>
 
@@ -51,9 +53,15 @@
 				})
 			},
 			discount(i) {
-				const arr = this.dataArr;
-				delete arr[i];
-				this.dataArr = arr;
+				this.dataArr.splice(i,1)
+				this.arr.splice(i,1)
+				// const arr = this.dataArr;
+				// const list = this.arr;
+				// delete arr[i];
+				// delete list[i];
+				// this.dataArr = arr;
+				// this.arr = list;
+				console.log(this.dataArr,this.arr,i)
 			},
 			lOrder(e) {
 				    var i = e.currentTarget.dataset.index
@@ -134,6 +142,11 @@
 					console.log(res.data)
 
 				}
+			},
+			async freeTell(){
+				const r = await this.$api.AddQianfeng(this.dataArr)
+				console.log('r=================',r)
+				
 			}
 		}
 	}
@@ -157,6 +170,7 @@
 		background-color: #FFFFFF;
 		width: 100%;
 		height: calc(100% - 20upx);
+		margin-bottom: 200upx;
 	}
 
 	.list {
@@ -207,5 +221,18 @@
 
 	.btns {
 		height: 100%;
+	}
+	.btnsubmit{
+		position: absolute;
+		bottom: 60upx;
+		left: 20upx;
+		height: 84upx;
+		width: 710upx;
+		border-radius: 10upx;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 84upx;
+		background-color: #005EA1;
+		font-size: 32upx;
 	}
 </style>

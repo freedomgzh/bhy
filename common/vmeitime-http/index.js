@@ -62,11 +62,23 @@ export const FeedBack = (data) => {
 		// handle:true
     })
 }
+export const AddQianfeng = (data) => {
+    return http.request({
+        url:'AddQianfeng',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+
+
+
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 login,
 getOrderList,
 getMessageList,
 picUrl,
-FeedBack
+FeedBack,
+AddQianfeng
 }
