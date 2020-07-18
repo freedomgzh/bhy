@@ -1,0 +1,1 @@
+<view class="content"><view class="list flexYc flexXb"><text>姓名</text><text>{{user.realname}}</text></view><view class="list flexYc flexXb"><text>手机号</text><text>{{user.mobile}}</text></view></view>

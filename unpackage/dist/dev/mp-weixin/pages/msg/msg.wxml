@@ -1,0 +1,1 @@
+<view class="content"><block wx:for="{{list}}" wx:for-item="s" wx:for-index="i" wx:key="i"><view class="list"><view class="flexXb flexYc"><text class="title">{{s.title}}</text><text class="time">{{s.postTime}}</text></view><view class="cont">{{''+s.content+''}}</view></view></block></view>

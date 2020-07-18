@@ -1,0 +1,61 @@
+
+page{
+	height: 100%;
+}
+.content{
+	height: 100%;
+	background-color: #F6F6F6;
+}
+.top{
+	height: 210rpx;	
+	background-color: #187BCD;
+	color: #FFFFFF;
+	font-size: 34rpx;
+}
+.headLogo{
+	border-radius: 50%;
+	height: 110rpx;
+	width: 110rpx;
+	margin-right: 20rpx;
+	margin-left: 30rpx;
+}
+.list{
+	font-size: 28rpx;
+	background-color: #FFFFFF;
+	border-radius: 8rpx;
+	margin: 20rpx;
+}
+.label{
+	height: 105rpx;
+	border-bottom: 2rpx solid#EEEEEE;
+}
+.personimg{
+	height: 46rpx;
+	width: 40rpx;
+	margin-right: 21rpx;
+	margin-left: 30rpx;
+}
+.kefuimg{
+	height: 41rpx;
+	width: 40rpx;
+	margin-right: 21rpx;
+	margin-left: 30rpx;
+}
+.suggessimg{
+	height: 42rpx;
+	width: 40rpx;
+	margin-right: 21rpx;
+	margin-left: 30rpx;
+}
+.settingimg{
+	height: 42rpx;
+	width: 41rpx;
+	margin-right: 21rpx;
+	margin-left: 30rpx;
+}
+.arrow{
+	width: 14rpx;
+	height: 25rpx;
+	margin-right: 20rpx;
+}
+

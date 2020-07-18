@@ -1,0 +1,33 @@
+
+.login{
+	height: 100%;
+	padding-top: 210rpx;
+	padding-left: 59rpx;
+	padding-right: 59rpx;
+}
+.title{
+	font-size: 48rpx;
+	font-weight: 800;
+}
+.tips{
+	margin-top: 33rpx;
+	font-size:24rpx;
+}
+.box{
+	margin-top: 46rpx;
+	color: #B8B8B8;
+	font-size: 26rpx;
+}
+.box .inputbox{
+	height: 100rpx;
+	border-bottom: 2rpx solid#EEEEEE;
+}
+.btns{
+	background-color: #005EA1;
+	height: 76rpx;
+	border-radius: 38rpx;
+	color: #FFFFFF;
+	font-size: 30rpx;
+	margin-top: 80rpx;
+}
+

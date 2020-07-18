@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/msg/msg",
+    "pages/mine/mine",
+    "pages/login/login",
+    "pages/writeNumber/writeNumber",
+    "pages/mine/psersonInfo",
+    "pages/mine/suggess",
+    "pages/mine/setting",
+    "pages/mine/phone",
+    "pages/meeting/meeting",
+    "pages/room/room"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#cdcdcd",
+    "selectedColor": "#187BCD",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabA.png",
+        "selectedIconPath": "static/tabAactive.png",
+        "text": "工作台"
+      },
+      {
+        "pagePath": "pages/msg/msg",
+        "iconPath": "static/tabMes.png",
+        "selectedIconPath": "static/tabMesactive.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "iconPath": "static/tabM.png",
+        "selectedIconPath": "static/tabMactive.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

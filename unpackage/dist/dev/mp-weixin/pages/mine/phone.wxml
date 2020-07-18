@@ -1,0 +1,1 @@
+<view class="content"><view class="list flexYc flexXb"><text>客服电话</text><text class="h">400-400-100</text></view><view data-event-opts="{{[['tap',[['freeTell',['$event']]]]]}}" class="btns" bindtap="__e">拨打客服电话</view></view>

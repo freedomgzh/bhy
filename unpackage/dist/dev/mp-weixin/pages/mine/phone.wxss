@@ -1,0 +1,33 @@
+
+page{
+	height: 100%;
+}
+.content{
+	height: 100%;
+	background-color: #F6F6F6;
+	padding-top: 19rpx;
+	/* position: relative; */
+}
+.list{
+	height: 100rpx;
+	padding:0 19rpx;
+	background-color: #FFFFFF;
+	font-size: 28rpx;
+}
+.h{
+	color: #999999;
+}
+.btns{
+	position: absolute;
+	bottom: 60rpx;
+	left: 20rpx;
+	height: 84rpx;
+	width: 710rpx;
+	border-radius: 10rpx;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 84rpx;
+	background-color: #005EA1;
+	font-size: 32rpx;
+}
+
