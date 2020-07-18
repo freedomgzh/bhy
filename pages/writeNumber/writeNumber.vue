@@ -146,7 +146,17 @@
 			async freeTell(){
 				const r = await this.$api.AddQianfeng(this.dataArr)
 				console.log('r=================',r)
-				
+				if(r.data.Status == 1){
+					uni.switchTab({
+						url:'../index/index'
+					})
+					
+				}else{
+					uni.showToast({
+						title:r.data.Memo,
+						icon:'none'
+					})
+				}
 			}
 		}
 	}
