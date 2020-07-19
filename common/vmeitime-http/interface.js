@@ -31,7 +31,7 @@ http.delete('user/1').then((res)=>{
 */
 export default {
 	config: {
-		baseUrl: "http://120.53.125.114:8002/Home/",
+		baseUrl: "https://api.baohaoyou88.com/Home/",
 		header: {
 			'Content-Type':'application/json;charset=UTF-8'
 			// 'Content-Type':'multipart/form-data'

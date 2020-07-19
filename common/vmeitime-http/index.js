@@ -22,8 +22,8 @@ export const test = (data) => {
 		return response;
 	}
     return http.request({
-		baseUrl: 'http://120.53.125.114:8002/Home/',
-        url: 'http://120.53.125.114:8002/Home/',
+		baseUrl: 'http://api.baohaoyou88.com/Home/',
+        url: 'http://api.baohaoyou88.com/Home/',
 		dataType: 'text',
         data,
     })
@@ -70,8 +70,22 @@ export const AddQianfeng = (data) => {
 		// handle:true
     })
 }
-
-
+export const GetOpenId_work = (data) => {
+    return http.request({
+        url:'GetOpenId_work',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+export const WeChatPay_work = (data) => {
+    return http.request({
+        url:'WeChatPay_work',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
 
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
@@ -80,5 +94,7 @@ getOrderList,
 getMessageList,
 picUrl,
 FeedBack,
-AddQianfeng
+AddQianfeng,
+GetOpenId_work,
+WeChatPay_work
 }
