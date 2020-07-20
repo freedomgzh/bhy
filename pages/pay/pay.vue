@@ -90,12 +90,12 @@
 				// #ifdef MP-WEIXIN
 				uni.requestPayment({
 					provider: 'wxpay',
-					orderInfo: '', // 订单数据
-					timeStamp: that.timestamp, // 时间戳从1970年1月1日至今的秒数，即当前的时间
-					nonceStr: that.noncestr, // 随机字符串，长度为32个字符以下
-					package: that.prepayid, // 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=xx
+					orderInfo: 'orderInfo', // 订单数据
+					timeStamp: '' + that.timestamp, // 时间戳从1970年1月1日至今的秒数，即当前的时间
+					nonceStr: '' + that.noncestr, // 随机字符串，长度为32个字符以下
+					package:  'prepay_id?' + that.prepayid, // 统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=xx
 					signType: 'MD5', //签名算法，暂支持 MD5
-					paySign: that.sign, // 签名
+					paySign: '' + that.sign, // 签名
 					success: function (res) {
 						// 支付成功的回调中 创建绘本馆成功
 						uni.showToast({
