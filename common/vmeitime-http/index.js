@@ -28,7 +28,7 @@ export const test = (data) => {
         data,
     })
 }
-export const picUrl = 'http://120.53.125.114:8002/ashx'
+export const picUrl = 'https://api.baohaoyou88.com/ashx'
 export const login = (data) => {
     return http.request({
         url: 'Login_work',

@@ -108,7 +108,7 @@
 						fileType: "image",
 						filePath: self.imgSrc[0] + "",
 						// filePath:'',
-						name: 'filePath',
+						name: 'file',
 						formData: {
 							filePath: self.imgSrc[0] + "",
 						},
