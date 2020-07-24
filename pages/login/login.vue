@@ -8,10 +8,10 @@
 		</view>
 		<view class="box">
 			<view class="inputbox flexYc">
-				<input type="number"  @input='listenPhone' v-model="phone" placeholder="请输入手机号码" />
+				<input type=""  @input='listenPhone' v-model="phone" placeholder="请输入用户名" />
 			</view>
 			<view class="inputbox flexYc">
-				<input type="number"  @input='listenCode' v-model="code" placeholder="请输入密码" />
+				<input type=""  @input='listenCode' v-model="code" placeholder="请输入密码" />
 			</view>
 			
 		</view>
