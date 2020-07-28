@@ -6,7 +6,11 @@
 		</view> -->
 		<view class="list flexYc flexXb">
 			<text>手机号</text>
-			<image src="../../static/arrow.png" mode="" class="arrow"></image>
+			<view class=" flexYc">
+				<text>{{user.mobile}}</text>
+				<image src="../../static/arrow.png" mode="" class="arrow"></image>
+			</view>
+			
 		</view>
 		<view class="btns" @tap="sub">
 			退出登录
@@ -18,7 +22,7 @@
 	export default{
 		data(){
 			return{
-				
+				user:{}
 			}
 			
 		},
@@ -60,6 +64,7 @@
 		width: 14upx;
 		height: 25upx;
 		margin-right: 20upx;
+		margin-left: 20upx;
 	}
 	.btns{
 		position: absolute;

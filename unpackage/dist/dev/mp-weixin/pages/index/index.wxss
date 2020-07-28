@@ -84,7 +84,7 @@ page{
 	background-color: #005EA1;
 	font-size: 26rpx;
 	height: 60rpx;
-	width: 194rpx;
+	width: 151rpx;
 	border-radius: 10rpx;
 }
 

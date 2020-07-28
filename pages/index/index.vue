@@ -50,10 +50,13 @@
 					填写铅封号
 				</view>
 				<view class="btns flexYc flexXc" @tap="getQvideo">
-					发起铅封视频
+					发起铅封
 				</view>
 				<view class="btns flexYc flexXc" @tap="getCvideo">
-					发起清罐视频
+					发起清罐
+				</view>
+				<view class="btns flexYc flexXc" @tap="finish">
+					完成订单
 				</view>
 			</view>
 		
@@ -70,13 +73,13 @@
 			}
 		},
 		onLoad() {
-		 this.getList(2)
+		
+		 
 		},
 		onShow() {
 			var that=this;
 			
 			function st(){
-				
 				return  that.$store.dispatch('isLogin')
 			}
 			console.log(that.$store)
@@ -87,6 +90,7 @@
 					console.log("镇的")
 					that.hasLoginData = 1
 					console.log(that.$store,that.hasLoginData)
+					that.getList(2)
 					
 				}else{
 					
@@ -99,17 +103,16 @@
 			});		
 		},
 		watch:{
-			index(v){
-				this.page = 1
-				this.getList(v)
-			}
+			
 		},
 		methods: {
 			change(i){
 				this.index = i
 			},
 			async getList(v){
-				const r = await this.$api.getOrderList({state:v,userId:this.$store.getters.userinfo.id})
+				
+				console.log('====================',this.$store.getters.userinfo)
+				const r = await this.$api.getOrderList({state:v,adminId:this.$store.getters.userinfo.id})
 				console.log('r=========',r)
 				if(r.data.Status == 1){
 					this.list=r.data.Data.Rows
@@ -227,7 +230,7 @@
 		background-color: #005EA1;
 		font-size: 26upx;
 		height: 60upx;
-		width: 194upx;
+		width: 151upx;
 		border-radius: 10upx;
 	}
 	
