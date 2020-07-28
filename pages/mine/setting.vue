@@ -1,9 +1,9 @@
 <template>
 	<view class="content">
-		<view class="list flexYc flexXb">
-			<text>服务协议</text>
+		<!-- <view class="list flexYc flexXb">
+			<text>头像</text>
 			<image src="../../static/arrow.png" mode="" class="arrow"></image>
-		</view>
+		</view> -->
 		<view class="list flexYc flexXb">
 			<text>手机号</text>
 			<image src="../../static/arrow.png" mode="" class="arrow"></image>

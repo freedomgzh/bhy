@@ -124,7 +124,13 @@
 						if (data.Status == 1) {
 							//   const index = data.data.indexOf('/static');
 							//   self.imgUrl =   data.data.substr(index+1,r[1].data.length)
-							self.imgUrl = data.Data
+							
+							
+							console.log('data========',data)
+							const datas =     this.dataArr[i]
+							datas.imgUrl = data.Data.path
+							vue.set(this.dataArr,i,datas)  
+							
 							uni.showToast({
 								title: '图片上传成功',
 							})
@@ -144,7 +150,7 @@
 				}
 			},
 			async freeTell(){
-				const r = await this.$api.AddQianfeng(this.dataArr)
+				const r = await this.$api.AddQianfeng({orderId:this.orderId,data:JSON.stringify( {rows:this.dataArr})  })
 				console.log('r=================',r)
 				if(r.data.Status == 1){
 					uni.switchTab({
