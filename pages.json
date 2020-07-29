@@ -72,7 +72,13 @@
 				"navigationBarTitleText": "支付"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/numberDetail/numberDetail/numberDetail",
+            "style" : {
+				"navigationBarTitleText": "查看铅封号"
+			}
+        }
+    ],
 	"tabBar": {
 	    "color": "#cdcdcd",
 	    "selectedColor": "#187BCD",

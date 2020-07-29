@@ -46,21 +46,36 @@
 				</view>
 			</view>
 			<view class="btnsBox flexXb flexYc">
-				<view class="btns flexYc flexXc" @tap="getNumber(s.id)">
-					填写铅封号
+				<view class="btns flexYc flexXc" @tap="getNumber(s.id)" v-if="index == 2">
+					填写铅封号	
 				</view>
-				<view class="btns flexYc flexXc" @tap="getQvideo">
+				<view class="btns flexYc flexXc" @tap="todetail(s.id)" v-else>
+					查看铅封号
+				</view>
+				<view class="btns flexYc flexXc" @tap="getQvideo" v-if="index == 2">
 					发起铅封
 				</view>
-				<view class="btns flexYc flexXc" @tap="getCvideo">
+				<view class="btns flexYc flexXc" @tap="wQvideo(s.id)" v-else>
+					查看铅封
+				</view>
+				<view class="btns flexYc flexXc" @tap="getCvideo" v-if="index == 2">
 					发起清罐
 				</view>
-				<view class="btns flexYc flexXc" @tap="finish">
+				<view class="btns flexYc flexXc" @tap="wCvideo(s.id)" v-else>
+					查看清罐
+				</view>
+				<view class="btns flexYc flexXc" @tap="finish(s.id)" v-if="index == 2">
 					完成订单
 				</view>
 			</view>
-		
+			
 		</view>		
+		<view class="videoBox" v-if="showVideo" @tap="close">
+			<video v-if="showVideo" id="myVideo" :src="url"
+			                @error="videoErrorCallback" :danmu-list="danmuList" enable-danmu danmu-btn controls></video>   
+					
+		</view>
+		
 	</view>
 </template>
 
@@ -69,7 +84,9 @@
 		data() {
 			return {
 				index: 2,
-				list:[]
+				list:[],
+				url:'',
+				showVideo:''
 			}
 		},
 		onLoad() {
@@ -103,7 +120,9 @@
 			});		
 		},
 		watch:{
-			
+			index(n,o){
+				this.getList(n)
+			}
 		},
 		methods: {
 			change(i){
@@ -124,19 +143,53 @@
 					})
 				}
 			},
+			async finish(id){
+				const r = await this.$api.CompleteOrder({orderId:id})
+				console.log('r=========',r)
+				if(r.data.Status == 1){
+					
+					this.getList(2)
+					
+				}else{
+					uni.showToast({
+						title:r.data.Memo,
+						icon:'none'
+					})
+				}
+			},
+			
 			getQvideo(){
 				console.log(0)
 				uni.navigateTo({
 					url:'../meeting/meeting'
 				})
 			},
-			getCvideo(){
-				
+			getCvideo(id){
+				console.log(0)
+				uni.navigateTo({
+					url:'../meeting/meeting'
+				})
+			},
+			async wCvideo(id){
+				const r = this.$api.GetVideoUrl({orderId:id,type:2})
+				this.showVideo = true
+			},
+			async wQvideo(id){
+				const r = this.$api.GetVideoUrl({orderId:id,type:1})
+				this.showVideo = true
 			},
 			getNumber(id){
 				uni.navigateTo({
 					url:'../writeNumber/writeNumber?id=' + id
 				})
+			},
+			todetail(id){
+				uni.navigateTo({
+					url:'../numberDetail/numberDetail/numberDetail?id=' + id
+				})
+			},
+			close(){
+				this.showVideo = false
 			}
 		}
 	}
@@ -233,5 +286,17 @@
 		width: 151upx;
 		border-radius: 10upx;
 	}
-	
+	.videoBox{
+		position: absolute;
+		top: 0;
+		width: 750upx;
+		height: 100%;
+	}
+	video{
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		width: 100%;
+	}
 </style>

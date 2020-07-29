@@ -87,6 +87,31 @@ export const WeChatPay_work = (data) => {
     })
 }
 
+export const CompleteOrder = (data) => {
+    return http.request({
+        url:'CompleteOrder',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+export const GetQianFengList = (data) => {
+    return http.request({
+        url:'GetQianFengList',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+export const GetVideoUrl = (data) => {
+    return http.request({
+        url:'GetVideoUrl',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 login,
@@ -96,5 +121,8 @@ picUrl,
 FeedBack,
 AddQianfeng,
 GetOpenId_work,
-WeChatPay_work
+WeChatPay_work,
+CompleteOrder,
+GetQianFengList,
+GetVideoUrl
 }
