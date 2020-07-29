@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="tab flex">
 			<view class="lab flexCol flexYc flex-grow-1" :class="{active:index==2}" @tap="change(2)">
-				<text>进行中</text>
+				<text>{{index == 2?'进行中':'已完成' }}</text>
 				<view :class="{activeBottom:index==2}" >
 					
 				</view>
