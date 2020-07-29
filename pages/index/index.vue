@@ -70,6 +70,7 @@
 			</view>
 			
 		</view>		
+		
 		<view class="videoBox" v-if="showVideo" @tap="close">
 			<video v-if="showVideo" id="myVideo" :src="url"
 			                @error="videoErrorCallback" :danmu-list="danmuList" enable-danmu danmu-btn controls></video>   
@@ -185,7 +186,7 @@
 			},
 			todetail(id){
 				uni.navigateTo({
-					url:'../numberDetail/numberDetail/numberDetail?id=' + id
+					url:'../numberDetail/numberDetail/numberDetail?id=' + 16
 				})
 			},
 			close(){
