@@ -25,7 +25,6 @@ export const EVENT = {
   IM_ERROR: 'IM_ERROR', // IM SDK 下线
 }
 
-
 export const DEFAULT_COMPONENT_CONFIG = {
   sdkAppID: '',
   userID: '',
