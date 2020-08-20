@@ -51,7 +51,7 @@
 			
 		},
 		onLoad() {
-			this.user = this.$store.getters.userinfo
+			this.user =uni.getStorageSync('userInfo')
 		},
 		methods:{
 			toPerson(){

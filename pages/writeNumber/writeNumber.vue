@@ -2,14 +2,36 @@
 	<view class="content">
 		<view class="listBox">
 			<view class="list flexYc" v-for='(s,i) in arr ' :key="i">
+				<view class="flex-grow-1 padding">
+					
+				<view class="flex bottom">
+					
+				
 				<view class=" camera flexCol flexYc flexXc">
-					<image src="../../static/camera.png" mode="" class="cameraImg"></image>
+					<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
+					<image :src="dataArr[i].imgUrl" mode="" class="cameraImg" v-else></image>
 					<view @tap="upLoad(i)">添加照片</view>
 				</view>
 
 				<view class="inputBox flexYc">
-					<input type="text" value="" :data-index='i' @input="lOrder" placeholder-style="color: #CACACA;" placeholder="请输入铅封号" />
+					<input type="text" value="" :data-index='i' @input="lOrder2" placeholder-style="color: #CACACA;" placeholder="请输入铅封号" />
 
+				</view>
+				</view>
+				<view class="flex">
+					
+				
+				<view class=" camera flexCol flexYc flexXc">
+					<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
+					<image :src="dataArr[i].mifengImgUrl" mode="" class="cameraImg" v-else></image>
+					<view @tap="upLoad2(i)">添加照片</view>
+				</view>
+				
+				<view class="inputBox flexYc">
+					<input type="text" value="" :data-index='i' @input="lOrder" placeholder-style="color: #CACACA;" placeholder="请输入密封码" />
+				
+				</view>
+				</view>
 				</view>
 				<view class="countBtns flex">
 					<view class="btns" @tap="count">
@@ -36,7 +58,9 @@
 				arr: [0],
 				dataArr: [{
 					qianfengNum:'',
-					imgUrl:''
+					imgUrl:'',
+					mifengNum:'',
+					mifengImgUrl:''
 				}],
 				orderId: ''
 			}
@@ -49,6 +73,7 @@
 				this.arr.push(this.arr.length);
 				this.dataArr.push({
 					qianfengNum:'',
+					mf:'',
 					imgUrl:''
 				})
 			},
@@ -67,6 +92,13 @@
 				    var i = e.currentTarget.dataset.index
 					const data =     this.dataArr[i]
 					data.qianfengNum = e.detail.value
+					vue.set(this.dataArr,i,data)  
+					console.log('e==============', e)
+			},
+			lOrder2(e) {
+				    var i = e.currentTarget.dataset.index
+					const data =     this.dataArr[i]
+					data.mifengNum = e.detail.value
 					vue.set(this.dataArr,i,data)  
 					console.log('e==============', e)
 			},
@@ -149,6 +181,86 @@
 
 				}
 			},
+			async  upLoad2(i) {
+				var self = this
+				const res = await uni.chooseImage({
+					count: 1, // 默认9
+					sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+					// success: function (res) {
+					// 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+					//   var tempFilePaths = res.tempFilePaths;
+					//   self.imgSrc = tempFilePaths;
+					//   console.log('tempFilePaths', tempFilePaths);
+			
+					//   uni.showLoading({
+					// 	title: '上传中',
+					//   })
+					//    console.log(formApi.header);
+			
+					// 	},
+					// 	fail: function (res) {
+					// 	  uni.hideLoading()
+					// 	  console.log(res.data)
+					// 	}
+				})
+				console.log('img==============================', res)
+				if (res[1].errMsg = "chooseImage:ok") {
+					var tempFilePaths = res[1].tempFilePaths;
+					self.imgSrc = tempFilePaths;
+					console.log('tempFilePaths', tempFilePaths);
+			
+					uni.showLoading({
+						title: '上传中',
+					})
+					
+					const r = await uni.uploadFile({
+						url: `${self.$api.picUrl}/upload.ashx`,
+						fileType: "image",
+						filePath: self.imgSrc[0] + "",
+						// filePath:'',
+						name: 'file',
+						formData: {
+							filePath: self.imgSrc[0] + "",
+						},
+						header: {
+							'Content-Type':'multipart/form-data'
+						},
+					})
+					console.log('r===============',r)
+					if (r[1].errMsg = "chooseImage:ok") {
+						console.log('上传商品图片res.data.pic_url', r)
+			
+						const data = JSON.parse(r[1].data)
+						if (data.Status == 1) {
+							//   const index = data.data.indexOf('/static');
+							//   self.imgUrl =   data.data.substr(index+1,r[1].data.length)
+							
+							
+							console.log('data========',data)
+							const datas =     this.dataArr[i]
+							datas.mifengImgUrl = data.Data.path
+							vue.set(this.dataArr,i,datas)  
+							
+							uni.showToast({
+								title: '图片上传成功',
+							})
+							uni.hideLoading()
+						} else {
+							uni.showToast({
+								title:data.Memo
+							})
+							uni.hideLoading()
+							
+						}
+					}
+				} else {
+					uni.hideLoading()
+					console.log(res.data)
+			
+				}
+			},
+			
 			async freeTell(){
 				const r = await this.$api.AddQianfeng({orderId:this.orderId,data:JSON.stringify( {rows:this.dataArr})  })
 				console.log('r=================',r)
@@ -163,7 +275,8 @@
 						icon:'none'
 					})
 				}
-			}
+			},
+			
 		}
 	}
 </script>
@@ -190,7 +303,7 @@
 	}
 
 	.list {
-		height: 147upx;
+		/* height: 147upx; */
 		margin: 0upx 20upx 0upx 20upx;
 		border-bottom: 1upx solid#EEEEEE;
 	}
@@ -250,5 +363,11 @@
 		line-height: 84upx;
 		background-color: #005EA1;
 		font-size: 32upx;
+	}
+	.bottom{
+		margin-bottom: 20upx;
+	}
+	.padding{
+		padding: 10upx 0 ;
 	}
 </style>

@@ -8,8 +8,8 @@
 			<text>手机号</text>
 			<view class=" flexYc">
 				<text>{{user.mobile}}</text>
-				<image src="../../static/arrow.png" mode="" class="arrow"></image>
-			</view>
+<!-- 				<image src="../../static/arrow.png" mode="" class="arrow"></image>
+ -->			</view>
 			
 		</view>
 		<view class="btns" @tap="sub">

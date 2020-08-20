@@ -7625,9 +7625,9 @@ module.exports = g;
 
 /***/ }),
 /* 4 */
-/*!*****************************!*\
-  !*** V:/保好油/bhy/pages.json ***!
-  \*****************************/
+/*!*********************************************!*\
+  !*** /Users/haier/Documents/bhy/pages.json ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -7768,9 +7768,9 @@ function normalizeComponent (
 
 /***/ }),
 /* 11 */
-/*!*********************************!*\
-  !*** V:/保好油/bhy/store/index.js ***!
-  \*********************************/
+/*!*************************************************!*\
+  !*** /Users/haier/Documents/bhy/store/index.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8741,9 +8741,9 @@ var index_esm = {
 
 /***/ }),
 /* 13 */
-/*!*********************************!*\
-  !*** V:/保好油/bhy/store/store.js ***!
-  \*********************************/
+/*!*************************************************!*\
+  !*** /Users/haier/Documents/bhy/store/store.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8843,7 +8843,7 @@ var index_esm = {
                       resolve(true);
                     }
                   }));case 3:return _context2.abrupt("return", _context2.sent);case 4:case "end":return _context2.stop();}}}, _callee2);}));function isLogin(_x2) {return _isLogin.apply(this, arguments);}return isLogin;}() } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"], __webpack_require__(/*! (webpack)/buildin/global.js */ 3)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"], __webpack_require__(/*! ./../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
 
 /***/ }),
 /* 14 */
@@ -9635,20 +9635,20 @@ if (hadRuntime) {
 
 /***/ }),
 /* 17 */
-/*!************************************************!*\
-  !*** V:/保好油/bhy/common/vmeitime-http/index.js ***!
-  \************************************************/
+/*!****************************************************************!*\
+  !*** /Users/haier/Documents/bhy/common/vmeitime-http/index.js ***!
+  \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = exports.AddQianfeng = exports.FeedBack = exports.getMessageList = exports.getOrderList = exports.login = exports.picUrl = exports.test = void 0;var _interface = _interopRequireDefault(__webpack_require__(/*! ./interface */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = exports.AddQianShou = exports.GetRenZhengInfo = exports.GetVideoUrl = exports.GetQianFengList = exports.CompleteOrder = exports.WeChatPay_work = exports.GetOpenId_work = exports.AddQianfeng = exports.FeedBack = exports.getMessageList = exports.getOrderList = exports.login = exports.picUrl = exports.test = void 0;var _interface = _interopRequireDefault(__webpack_require__(/*! ./interface */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 /**
-                                                                                                                                                                                                                                                                                                                                                                                                            * 将业务所有接口统一起来便于维护
-                                                                                                                                                                                                                                                                                                                                                                                                            * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
-                                                                                                                                                                                                                                                                                                                                                                                                            * 
-                                                                                                                                                                                                                                                                                                                                                                                                            */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 将业务所有接口统一起来便于维护
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
 var test = function test(data) {
@@ -9666,13 +9666,13 @@ var test = function test(data) {
     return response;
   };
   return _interface.default.request({
-    baseUrl: 'http://120.53.125.114:8002/Home/',
-    url: 'http://120.53.125.114:8002/Home/',
+    baseUrl: 'http://api.baohaoyou88.com/Home/',
+    url: 'http://api.baohaoyou88.com/Home/',
     dataType: 'text',
     data: data });
 
 };exports.test = test;
-var picUrl = 'http://120.53.125.114:8002/ashx';exports.picUrl = picUrl;
+var picUrl = 'https://api.baohaoyou88.com/ashx';exports.picUrl = picUrl;
 var login = function login(data) {
   return _interface.default.request({
     url: 'Login_work',
@@ -9713,24 +9713,85 @@ var AddQianfeng = function AddQianfeng(data) {
     data: data
     // handle:true
   });
+};exports.AddQianfeng = AddQianfeng;
+var GetOpenId_work = function GetOpenId_work(data) {
+  return _interface.default.request({
+    url: 'GetOpenId_work',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.GetOpenId_work = GetOpenId_work;
+var WeChatPay_work = function WeChatPay_work(data) {
+  return _interface.default.request({
+    url: 'WeChatPay_work',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.WeChatPay_work = WeChatPay_work;
+
+var CompleteOrder = function CompleteOrder(data) {
+  return _interface.default.request({
+    url: 'CompleteOrder',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.CompleteOrder = CompleteOrder;
+var GetQianFengList = function GetQianFengList(data) {
+  return _interface.default.request({
+    url: 'GetQianFengList',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.GetQianFengList = GetQianFengList;
+var GetVideoUrl = function GetVideoUrl(data) {
+  return _interface.default.request({
+    url: 'GetVideoUrl',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.GetVideoUrl = GetVideoUrl;
+var GetRenZhengInfo = function GetRenZhengInfo(data) {
+  return _interface.default.request({
+    url: 'GetRenZhengInfo',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
+};exports.GetRenZhengInfo = GetRenZhengInfo;
+var AddQianShou = function AddQianShou(data) {
+  return _interface.default.request({
+    url: 'AddQianShou',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
 };
-
-
-
 // 默认全部导出  import api from '@/common/vmeitime-http/'
-exports.AddQianfeng = AddQianfeng;var _default = {
+exports.AddQianShou = AddQianShou;var _default = {
   login: login,
   getOrderList: getOrderList,
   getMessageList: getMessageList,
   picUrl: picUrl,
   FeedBack: FeedBack,
-  AddQianfeng: AddQianfeng };exports.default = _default;
+  AddQianfeng: AddQianfeng,
+  GetOpenId_work: GetOpenId_work,
+  WeChatPay_work: WeChatPay_work,
+  CompleteOrder: CompleteOrder,
+  GetQianFengList: GetQianFengList,
+  GetVideoUrl: GetVideoUrl,
+  GetRenZhengInfo: GetRenZhengInfo,
+  AddQianShou: AddQianShou };exports.default = _default;
 
 /***/ }),
 /* 18 */
-/*!****************************************************!*\
-  !*** V:/保好油/bhy/common/vmeitime-http/interface.js ***!
-  \****************************************************/
+/*!********************************************************************!*\
+  !*** /Users/haier/Documents/bhy/common/vmeitime-http/interface.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9768,7 +9829,7 @@ exports.AddQianfeng = AddQianfeng;var _default = {
                                                                                                          */var _default =
 {
   config: {
-    baseUrl: "http://120.53.125.114:8002/Home/",
+    baseUrl: "https://api.baohaoyou88.com/Home/",
     header: {
       'Content-Type': 'application/json;charset=UTF-8'
       // 'Content-Type':'multipart/form-data'

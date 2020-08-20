@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"enhance": false,
 		"postcss": true,
@@ -27,13 +27,13 @@
 			"outputPath": ""
 		},
 		"useIsolateContext": true,
-		"useCompilerModule": true,
+		"useCompilerModule": false,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.11.3",
+	"libVersion": "",
 	"appid": "wx0ba46596e53c018c",
-	"projectname": "%E4%BF%9D%E5%A5%BD%E6%B2%B9",
+	"projectname": "保好油",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {

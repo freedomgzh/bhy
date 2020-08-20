@@ -7,7 +7,7 @@ Page({
    */
   data: {
     rtcConfig: {
-      sdkAppID: '', // 必要参数 开通实时音视频服务创建应用后分配的 sdkAppID
+      sdkAppID: '1400399195', // 必要参数 开通实时音视频服务创建应用后分配的 sdkAppID
       userID: '', // 必要参数 用户 ID 可以由您的帐号系统指定
       userSig: '', // 必要参数 身份签名，相当于登录密码的作用
       template: '', // 必要参数 组件模版，支持的值 1v1 grid custom ，注意：不支持动态修改, iOS 不支持 pusher 动态渲染

@@ -1,1 +1,1 @@
-<view class="_div"></view>
+<view class="content"><view class="list flexYc flexXb"><text>手机号</text><view class=" flexYc"><text>{{user.mobile}}</text></view></view><view data-event-opts="{{[['tap',[['sub',['$event']]]]]}}" class="btns" bindtap="__e">退出登录</view></view>

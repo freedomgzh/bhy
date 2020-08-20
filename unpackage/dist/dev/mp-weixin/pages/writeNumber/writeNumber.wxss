@@ -16,7 +16,7 @@ page {
 	margin-bottom: 200rpx;
 }
 .list {
-	height: 147rpx;
+	/* height: 147upx; */
 	margin: 0rpx 20rpx 0rpx 20rpx;
 	border-bottom: 1rpx solid#EEEEEE;
 }
@@ -69,5 +69,11 @@ page {
 	line-height: 84rpx;
 	background-color: #005EA1;
 	font-size: 32rpx;
+}
+.bottom{
+	margin-bottom: 20rpx;
+}
+.padding{
+	padding: 10rpx 0;
 }
 

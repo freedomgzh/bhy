@@ -111,7 +111,22 @@ export const GetVideoUrl = (data) => {
 		// handle:true
     })
 }
-
+export const GetRenZhengInfo = (data) => {
+    return http.request({
+        url:'GetRenZhengInfo',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
+export const AddQianShou = (data) => {
+    return http.request({
+        url:'AddQianShou',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 login,
@@ -124,5 +139,7 @@ GetOpenId_work,
 WeChatPay_work,
 CompleteOrder,
 GetQianFengList,
-GetVideoUrl
+GetVideoUrl,
+GetRenZhengInfo,
+AddQianShou
 }

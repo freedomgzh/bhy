@@ -10,12 +10,13 @@
     "pages/mine/setting",
     "pages/mine/phone",
     "pages/meeting/meeting",
-    "pages/room/room"
+    "pages/pay/pay",
+    "pages/numberDetail/numberDetail/numberDetail"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
+    "navigationBarTitleText": "保好油",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
@@ -45,5 +46,6 @@
       }
     ]
   },
-  "usingComponents": {}
+  "usingComponents": {},
+  "sitemapLocation": "sitemap82.json"
 }

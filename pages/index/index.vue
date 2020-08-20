@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="tab flex">
 			<view class="lab flexCol flexYc flex-grow-1" :class="{active:index==2}" @tap="change(2)">
-				<text>{{index == 2?'进行中':'已完成' }}</text>
+				<text>进行中</text>
 				<view :class="{activeBottom:index==2}" >
 					
 				</view>
@@ -52,17 +52,18 @@
 				<view class="btns flexYc flexXc" @tap="todetail(s.id)" v-else>
 					查看铅封号
 				</view>
-				<view class="btns flexYc flexXc" @tap="getQvideo" v-if="index == 2">
-					发起铅封
-				</view>
-				<view class="btns flexYc flexXc" @tap="wQvideo(s.id)" v-else>
-					查看铅封
-				</view>
-				<view class="btns flexYc flexXc" @tap="getCvideo" v-if="index == 2">
-					发起清罐
+				
+				<view class="btns flexYc flexXc" @tap="getCvideo(s.id)" v-if="index == 2">
+					清罐进场
 				</view>
 				<view class="btns flexYc flexXc" @tap="wCvideo(s.id)" v-else>
 					查看清罐
+				</view>
+				<view class="btns flexYc flexXc" @tap="getQvideo(s.id)" v-if="index == 2">
+					出厂施封
+				</view>
+				<view class="btns flexYc flexXc" @tap="wQvideo(s.id)" v-else>
+					查看铅封
 				</view>
 				<view class="btns flexYc flexXc" @tap="finish(s.id)" v-if="index == 2">
 					完成订单
@@ -71,10 +72,29 @@
 			
 		</view>		
 		
-		<view class="videoBox" v-if="showVideo" @tap="close">
-			<video v-if="showVideo" id="myVideo" :src="url"
-			                @error="videoErrorCallback" :danmu-list="danmuList" enable-danmu danmu-btn controls></video>   
+		<view class="videoBox" :style="{top:height + 'px'}" v-if="showVideo" @tap="close">
+			<view class="chooseContent" >
+				<view class="title flexXa">
+					<view class="">
+							
+					</view>
+					<view class="">
+						查看铅封视频
+					</view>	
+					<image class="closeImg" src="../../static/关闭%20(10)%20拷贝%203@3x.png" mode=""></image>
+				</view>
+				 <view @tap="choose(i)" class="box" v-for="(s,i) in vlist" :key='i'>视频{{i + 1}}</view>
 					
+			</view>	
+		</view>
+		
+		<view class="videoBoxs":style="{top:height + 'px'}" v-if="hasChoose" >
+			<view class="close flexXc flexYc" @tap="closeBox">
+				<image class="closeBtn" src="../../static/关闭%20(10)%20拷贝%203@3x.png" mode=""></image>
+			</view>
+			<video v-if="hasChoose" id="myVideo" :src="vlist[i].url"
+			                @error="videoErrorCallback" :danmu-list="danmuList" enable-danmu danmu-btn controls></video>   
+				
 		</view>
 		
 	</view>
@@ -87,7 +107,12 @@
 				index: 2,
 				list:[],
 				url:'',
-				showVideo:''
+				showVideo:false,
+				height:'',
+				hasChoose:false,
+				i:0,
+				vlist:[]
+				
 			}
 		},
 		onLoad() {
@@ -108,7 +133,7 @@
 					console.log("镇的")
 					that.hasLoginData = 1
 					console.log(that.$store,that.hasLoginData)
-					that.getList(2)
+					that.getList(that.index)
 					
 				}else{
 					
@@ -159,24 +184,46 @@
 				}
 			},
 			
-			getQvideo(){
+			getQvideo(id){
 				console.log(0)
 				uni.navigateTo({
-					url:'../meeting/meeting'
+					url:'../meeting/meeting?id=' + id
 				})
+				
 			},
 			getCvideo(id){
 				console.log(0)
 				uni.navigateTo({
-					url:'../meeting/meeting'
+					url:'../meeting/meeting?id='  + id
 				})
 			},
 			async wCvideo(id){
-				const r = this.$api.GetVideoUrl({orderId:id,type:2})
+				const r =await this.$api.GetVideoUrl({orderId:id,type:2})
+				console.log('video===========',r)
+				if(r.data.Status == 1){
+					this.vlist=r.data.Data.Rows
+					
+				}else{
+					uni.showToast({
+						title:r.data.Memo,
+						icon:'none'
+					})
+				}
 				this.showVideo = true
 			},
 			async wQvideo(id){
-				const r = this.$api.GetVideoUrl({orderId:id,type:1})
+				const r =await this.$api.GetVideoUrl({orderId:id,type:1})
+				if(r.data.Status == 1){
+					this.vlist=r.data.Data.Rows
+					
+				}else{
+					uni.showToast({
+						title:r.data.Memo,
+						icon:'none'
+					})
+				}
+				
+				
 				this.showVideo = true
 			},
 			getNumber(id){
@@ -186,13 +233,26 @@
 			},
 			todetail(id){
 				uni.navigateTo({
-					url:'../numberDetail/numberDetail/numberDetail?id=' + 16
+					url:'../numberDetail/numberDetail/numberDetail?id=' + id
 				})
 			},
 			close(){
 				this.showVideo = false
+			},
+			closeBox(){
+				this.hasChoose = false
+			},
+			choose(index){
+				this.i = index
+				this.hasChoose = true
 			}
-		}
+		},
+		onPageScroll(res) {  
+		
+				this.height  = res.scrollTop;
+				
+		
+		}  
 	}
 </script>
 
@@ -293,11 +353,64 @@
 		width: 750upx;
 		height: 100%;
 	}
+	.videoBoxs{
+		position: absolute;
+		top: 0;
+		width: 750upx;
+		height: 100%;
+	}
+	.chooseContent{
+		position: absolute;
+		top: 50%;
+		
+		left: 50%;
+		transform: translate(-50%);
+		background-color: #FFFFFF;
+		border-radius: 10upx;
+		width:calc( 100% - 140upx);
+		padding-bottom: 40upx;
+	}
 	video{
 		position: absolute;
 		top: 50%;
 		left: 0;
 		transform: translateY(-50%);
 		width: 100%;
+		z-index: 10000;
+	}
+	
+	.closeBtn{
+		width: 50upx;
+		height: 50upx;
+	}
+	.close{
+		font-size: 28upx;
+		line-height: 80upx;
+		margin-top: 20px;
+		background-color: #FFFFFF;
+		width: 120upx;
+		text-align: center;
+		border-radius: 10upx;
+		height: 80upx;
+		text-align: center;
+		
+	}
+	.closeImg{
+		width: 50upx;
+		height: 50upx;
+	}
+	.title{
+		height: 100upx;
+		line-height: 100upx;
+	}
+	.box{
+		height: 80upx;
+		width: 462upx;
+		line-height: 80upx;
+		text-align: center;
+		margin-left: 90upx;
+		border: 2upx solid#000000;
+		border-radius: 5upx;
+		margin-bottom: 10upx;
 	}
 </style>
