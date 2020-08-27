@@ -16,7 +16,7 @@
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "保好油",
+    "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
@@ -47,5 +47,5 @@
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap82.json"
+  "sitemapLocation": "sitemap16.json"
 }

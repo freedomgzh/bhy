@@ -2,13 +2,13 @@
 	<view class="content">
 		<view class="tab flex">
 			<view class="lab flexCol flexYc flex-grow-1" :class="{active:index==2}" @tap="change(2)">
-				<text>进行中</text>
+				<text>进行中({{hasnum}})</text>
 				<view :class="{activeBottom:index==2}" >
 					
 				</view>
 			</view>
 			<view class="lab flexCol flexYc flex-grow-1" :class="{active:index==3}" @tap="change(3)">
-				<text>已完成</text>
+				<text>已完成({{notnum}})</text>
 				<view :class="{activeBottom:index==3}">
 					
 				</view>
@@ -30,6 +30,9 @@
 				<view class="label ">
 					地点：{{s.factoryName}}
 				</view>
+				<view class="label ">
+					订单号：{{s.orderNo}}
+				</view>
 				<view class="label flexXb">
 					<text>到厂时间：{{s.daochangTime}}</text>
 					<text>监督项：{{s.workContent}}</text>
@@ -44,6 +47,10 @@
 					<text>运输物：{{s.goodsName}}</text>
 					<text>车牌号：{{s.carNumber}}</text>
 				</view>
+				<view class="label flexXb">
+					<text>清罐房间号：{{s.qingGuanRoomId}}</text>
+					<text>铅封房间号：{{s.qianFengRoomId}}</text>
+				</view>
 			</view>
 			<view class="btnsBox flexXb flexYc">
 				<view class="btns flexYc flexXc" @tap="getNumber(s.id)" v-if="index == 2">
@@ -53,13 +60,13 @@
 					查看铅封号
 				</view>
 				
-				<view class="btns flexYc flexXc" @tap="getCvideo(s.id)" v-if="index == 2">
+				<view class="btns flexYc flexXc" @tap="getCvideo(s.qingGuanRoomId)" v-if="index == 2">
 					清罐进场
 				</view>
 				<view class="btns flexYc flexXc" @tap="wCvideo(s.id)" v-else>
 					查看清罐
 				</view>
-				<view class="btns flexYc flexXc" @tap="getQvideo(s.id)" v-if="index == 2">
+				<view class="btns flexYc flexXc" @tap="getQvideo(s.qianFengRoomId)" v-if="index == 2">
 					出厂施封
 				</view>
 				<view class="btns flexYc flexXc" @tap="wQvideo(s.id)" v-else>
@@ -111,12 +118,14 @@
 				height:'',
 				hasChoose:false,
 				i:0,
-				vlist:[]
+				vlist:[],
+				hasnum:0,
+				notnum:0
 				
 			}
 		},
 		onLoad() {
-		
+			this.getnum()
 		 
 		},
 		onShow() {
@@ -153,6 +162,22 @@
 		methods: {
 			change(i){
 				this.index = i
+			},
+			async getnum(v){
+				
+				
+				const r = await this.$api.GetOrderNum({adminId:uni.getStorageSync('userInfo').id})
+				console.log('r=========',uni.getStorageSync('userInfo').user_id)
+				if(r.data.Status == 1){
+					this.hasnum=r.data.Data.haveingCount
+					this.notnum=r.data.Data.completeCount
+					console.log('==========',this.hasnum)
+				}else{
+					uni.showToast({
+						title:r.data.Memo,
+						icon:'none'
+					})
+				}
 			},
 			async getList(v){
 				

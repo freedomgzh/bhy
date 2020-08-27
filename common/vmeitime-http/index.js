@@ -127,6 +127,14 @@ export const AddQianShou = (data) => {
 		// handle:true
     })
 }
+export const GetOrderNum = (data) => {
+    return http.request({
+        url:'GetOrderNum',
+		method: 'POST', 
+        data,
+		// handle:true
+    })
+}
 // 默认全部导出  import api from '@/common/vmeitime-http/'
 export default {
 login,
@@ -141,5 +149,6 @@ CompleteOrder,
 GetQianFengList,
 GetVideoUrl,
 GetRenZhengInfo,
-AddQianShou
+AddQianShou,
+GetOrderNum
 }

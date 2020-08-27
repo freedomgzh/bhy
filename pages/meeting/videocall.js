@@ -17,8 +17,10 @@ Page({
     statusBarHeight: app.globalData.statusBarHeight,
   },
 
-  onLoad: function() {
-
+  onLoad: function(e) {
+	this.setData({
+	  roomID: e.id,
+	})
   },
   enterRoomID: function(event) {
     // console.log('index enterRoomID', event)

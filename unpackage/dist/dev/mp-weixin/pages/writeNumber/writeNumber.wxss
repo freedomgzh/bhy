@@ -76,4 +76,8 @@ page {
 .padding{
 	padding: 10rpx 0;
 }
+scroll-view{
+	height:calc(100% - 160rpx)!important;
+	overflow: hidden;
+}
 

@@ -1,48 +1,52 @@
 <template>
 	<view class="content">
 		<view class="listBox">
-			<view class="list flexYc" v-for='(s,i) in arr ' :key="i">
-				<view class="flex-grow-1 padding">
+			<scroll-view scroll-y="true" >
+				<view class="list flexYc" v-for='(s,i) in arr ' :key="i">
+					<view class="flex-grow-1 padding">
+						
+					<view class="flex bottom">
+						
 					
-				<view class="flex bottom">
-					
-				
-				<view class=" camera flexCol flexYc flexXc">
-					<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
-					<image :src="dataArr[i].imgUrl" mode="" class="cameraImg" v-else></image>
-					<view @tap="upLoad(i)">添加照片</view>
-				</view>
-
-				<view class="inputBox flexYc">
-					<input type="text" value="" :data-index='i' @input="lOrder2" placeholder-style="color: #CACACA;" placeholder="请输入铅封号" />
-
-				</view>
-				</view>
-				<view class="flex">
-					
-				
-				<view class=" camera flexCol flexYc flexXc">
-					<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
-					<image :src="dataArr[i].mifengImgUrl" mode="" class="cameraImg" v-else></image>
-					<view @tap="upLoad2(i)">添加照片</view>
-				</view>
-				
-				<view class="inputBox flexYc">
-					<input type="text" value="" :data-index='i' @input="lOrder" placeholder-style="color: #CACACA;" placeholder="请输入密封码" />
-				
-				</view>
-				</view>
-				</view>
-				<view class="countBtns flex">
-					<view class="btns" @tap="count">
-						<image src="../../static/count.png" mode="" class="countImg"></image>
+					<view class=" camera flexCol flexYc flexXc">
+						<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
+						<image :src="dataArr[i].imgUrl" mode="" class="cameraImg" v-else></image>
+						<view @tap="upLoad(i)">添加照片</view>
 					</view>
-					<view class="btns" @tap="discount(i)">
-						<image src="../../static/discount.png" mode="" class="discountImg"></image>
+				
+					<view class="inputBox flexYc">
+						<input type="text" value="" :data-index='i' @input="lOrder2" placeholder-style="color: #CACACA;" placeholder="请输入铅封号" />
+				
 					</view>
-
+					</view>
+					<view class="flex">
+						
+					
+					<view class=" camera flexCol flexYc flexXc">
+						<image src="../../static/camera.png" mode="" class="cameraImg" v-if="!dataArr[i].imgUrl"></image>
+						<image :src="dataArr[i].mifengImgUrl" mode="" class="cameraImg" v-else></image>
+						<view @tap="upLoad2(i)">添加照片</view>
+					</view>
+					
+					<view class="inputBox flexYc">
+						<input type="text" value="" :data-index='i' @input="lOrder" placeholder-style="color: #CACACA;" placeholder="请输入密封码" />
+					
+					</view>
+					</view>
+					</view>
+					<view class="countBtns flex">
+						<view class="btns" @tap="count">
+							<image src="../../static/count.png" mode="" class="countImg"></image>
+						</view>
+						<view class="btns" @tap="discount(i)">
+							<image src="../../static/discount.png" mode="" class="discountImg"></image>
+						</view>
+				
+					</view>
 				</view>
-			</view>
+						
+			</scroll-view>
+			
 		</view>
 		<view class="btnsubmit" @tap="freeTell">
 			提交
@@ -369,5 +373,9 @@
 	}
 	.padding{
 		padding: 10upx 0 ;
+	}
+	scroll-view{
+		height:calc(100% - 160rpx)!important;
+		overflow: hidden;
 	}
 </style>

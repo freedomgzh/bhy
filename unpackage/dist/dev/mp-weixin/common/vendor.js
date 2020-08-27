@@ -144,7 +144,7 @@ function queue(hooks, data) {
   for (var i = 0; i < hooks.length; i++) {
     var hook = hooks[i];
     if (promise) {
-      promise = Promise.then(wrapperHook(hook));
+      promise = Promise.resolve(wrapperHook(hook));
     } else {
       var res = hook(data);
       if (isPromise(res)) {
@@ -456,7 +456,9 @@ function processArgs(methodName, fromArgs) {var argsOption = arguments.length > 
           toArgs[keyOption.name ? keyOption.name : key] = keyOption.value;
         }
       } else if (CALLBACKS.indexOf(key) !== -1) {
-        toArgs[key] = processCallback(methodName, fromArgs[key], returnValue);
+        if (isFn(fromArgs[key])) {
+          toArgs[key] = processCallback(methodName, fromArgs[key], returnValue);
+        }
       } else {
         if (!keepFromArgs) {
           toArgs[key] = fromArgs[key];
@@ -571,10 +573,6 @@ var extraApi = /*#__PURE__*/Object.freeze({
 
 
 var getEmitter = function () {
-  if (typeof getUniEmitter === 'function') {
-    /* eslint-disable no-undef */
-    return getUniEmitter;
-  }
   var Emitter;
   return function getUniEmitter() {
     if (!Emitter) {
@@ -661,6 +659,8 @@ Component = function Component() {var options = arguments.length > 0 && argument
 var PAGE_EVENT_HOOKS = [
 'onPullDownRefresh',
 'onReachBottom',
+'onAddToFavorites',
+'onShareTimeline',
 'onShareAppMessage',
 'onPageScroll',
 'onResize',
@@ -862,6 +862,11 @@ function initProperties(props) {var isBehavior = arguments.length > 1 && argumen
       type: String,
       value: '' };
 
+    // 用于字节跳动小程序模拟抽象节点
+    properties.generic = {
+      type: Object,
+      value: null };
+
     properties.vueSlots = { // 小程序不能直接定义 $slots 的 props，所以通过 vueSlots 转换到 $slots
       type: null,
       value: [],
@@ -947,7 +952,18 @@ function getExtraValue(vm, dataPathsArray) {
       var propPath = dataPathArray[1];
       var valuePath = dataPathArray[3];
 
-      var vFor = dataPath ? vm.__get_value(dataPath, context) : context;
+      var vFor;
+      if (Number.isInteger(dataPath)) {
+        vFor = dataPath;
+      } else if (!dataPath) {
+        vFor = context;
+      } else if (typeof dataPath === 'string' && dataPath) {
+        if (dataPath.indexOf('#s#') === 0) {
+          vFor = dataPath.substr(3);
+        } else {
+          vFor = vm.__get_value(dataPath, context);
+        }
+      }
 
       if (Number.isInteger(vFor)) {
         context = value;
@@ -997,6 +1013,12 @@ function processEventExtra(vm, extra, event) {
         } else {
           if (dataPath === '$event') {// $event
             extraObj['$' + index] = event;
+          } else if (dataPath === 'arguments') {
+            if (event.detail && event.detail.__args__) {
+              extraObj['$' + index] = event.detail.__args__;
+            } else {
+              extraObj['$' + index] = [event];
+            }
           } else if (dataPath.indexOf('$event.') === 0) {// $event.target.value
             extraObj['$' + index] = vm.__get_value(dataPath.replace('$event.', ''), event);
           } else {
@@ -1077,6 +1099,15 @@ function isMatchEventType(eventType, optType) {
 
 }
 
+function getContextVm(vm) {
+  var $parent = vm.$parent;
+  // 父组件是 scoped slots 或者其他自定义组件时继续查找
+  while ($parent && $parent.$parent && ($parent.$options.generic || $parent.$parent.$options.generic || $parent.$scope._$vuePid)) {
+    $parent = $parent.$parent;
+  }
+  return $parent && $parent.$parent;
+}
+
 function handleEvent(event) {var _this = this;
   event = wrapper$1(event);
 
@@ -1109,12 +1140,8 @@ function handleEvent(event) {var _this = this;
         var methodName = eventArray[0];
         if (methodName) {
           var handlerCtx = _this.$vm;
-          if (
-          handlerCtx.$options.generic &&
-          handlerCtx.$parent &&
-          handlerCtx.$parent.$parent)
-          {// mp-weixin,mp-toutiao 抽象节点模拟 scoped slots
-            handlerCtx = handlerCtx.$parent.$parent;
+          if (handlerCtx.$options.generic) {// mp-weixin,mp-toutiao 抽象节点模拟 scoped slots
+            handlerCtx = getContextVm(handlerCtx) || handlerCtx;
           }
           if (methodName === '$emit') {
             handlerCtx.$emit.apply(handlerCtx,
@@ -1138,14 +1165,17 @@ function handleEvent(event) {var _this = this;
             }
             handler.once = true;
           }
-          ret.push(handler.apply(handlerCtx, processEventArgs(
+          var params = processEventArgs(
           _this.$vm,
           event,
           eventArray[1],
           eventArray[2],
           isCustom,
-          methodName)));
-
+          methodName) ||
+          [];
+          // 参数尾部增加原始事件对象用于复杂表达式内获取额外数据
+          // eslint-disable-next-line no-sparse-arrays
+          ret.push(handler.apply(handlerCtx, params.concat([,,,,,,,,,, event])));
         }
       });
     }
@@ -1164,7 +1194,9 @@ var hooks = [
 'onShow',
 'onHide',
 'onError',
-'onPageNotFound'];
+'onPageNotFound',
+'onThemeChange',
+'onUnhandledRejection'];
 
 
 function parseBaseApp(vm, _ref3)
@@ -1498,7 +1530,7 @@ var uni = {};
 if (typeof Proxy !== 'undefined' && "mp-weixin" !== 'app-plus') {
   uni = new Proxy({}, {
     get: function get(target, name) {
-      if (target[name]) {
+      if (hasOwn(target, name)) {
         return target[name];
       }
       if (baseApi[name]) {
@@ -2273,13 +2305,7 @@ var uid = 0;
  * directives subscribing to it.
  */
 var Dep = function Dep () {
-  // fixed by xxxxxx (nvue vuex)
-  /* eslint-disable no-undef */
-  if(typeof SharedObject !== 'undefined'){
-    this.id = SharedObject.uid++;
-  } else {
-    this.id = uid++;
-  }
+  this.id = uid++;
   this.subs = [];
 };
 
@@ -2316,7 +2342,7 @@ Dep.prototype.notify = function notify () {
 // can be evaluated at a time.
 // fixed by xxxxxx (nvue shared vuex)
 /* eslint-disable no-undef */
-Dep.SharedObject = typeof SharedObject !== 'undefined' ? SharedObject : {};
+Dep.SharedObject = {};
 Dep.SharedObject.target = null;
 Dep.SharedObject.targetStack = [];
 
@@ -7166,6 +7192,15 @@ function cloneWithData(vm) {
     ret[key] = vm[key];
     return ret
   }, ret);
+
+  // vue-composition-api
+  var rawBindings = vm.__secret_vfa_state__ && vm.__secret_vfa_state__.rawBindings;
+  if (rawBindings) {
+    Object.keys(rawBindings).forEach(function (key) {
+      ret[key] = vm[key];
+    });
+  }
+  
   //TODO 需要把无用数据处理掉，比如 list=>l0 则 list 需要移除，否则多传输一份数据
   Object.assign(ret, vm.$mp.data || {});
   if (
@@ -7370,7 +7405,7 @@ function getTarget(obj, path) {
   return getTarget(obj[key], parts.slice(1).join('.'))
 }
 
-function internalMixin(Vue ) {
+function internalMixin(Vue) {
 
   Vue.config.errorHandler = function(err, vm, info) {
     Vue.util.warn(("Error in " + info + ": \"" + (err.toString()) + "\""), vm);
@@ -7488,7 +7523,7 @@ function internalMixin(Vue ) {
   };
 
   Vue.prototype.__map = function(val, iteratee) {
-    //TODO 暂不考虑 string,number
+    //TODO 暂不考虑 string
     var ret, i, l, keys, key;
     if (Array.isArray(val)) {
       ret = new Array(val.length);
@@ -7502,6 +7537,13 @@ function internalMixin(Vue ) {
       for (i = 0, l = keys.length; i < l; i++) {
         key = keys[i];
         ret[key] = iteratee(val[key], key, i);
+      }
+      return ret
+    } else if (typeof val === 'number') {
+      ret = new Array(val);
+      for (i = 0, l = val; i < l; i++) {
+        // 第一个参数暂时仍和小程序一致
+        ret[i] = iteratee(i, i);
       }
       return ret
     }
@@ -7518,7 +7560,10 @@ var LIFECYCLE_HOOKS$1 = [
     'onShow',
     'onHide',
     'onUniNViewMessage',
+    'onPageNotFound',
+    'onThemeChange',
     'onError',
+    'onUnhandledRejection',
     //Page
     'onLoad',
     // 'onShow',
@@ -7528,6 +7573,8 @@ var LIFECYCLE_HOOKS$1 = [
     'onPullDownRefresh',
     'onReachBottom',
     'onTabItemTap',
+    'onAddToFavorites',
+    'onShareTimeline',
     'onShareAppMessage',
     'onResize',
     'onPageScroll',
@@ -7625,9 +7672,9 @@ module.exports = g;
 
 /***/ }),
 /* 4 */
-/*!*********************************************!*\
-  !*** /Users/haier/Documents/bhy/pages.json ***!
-  \*********************************************/
+/*!*******************************************************!*\
+  !*** /Users/guanzhihao/Documents/code/bhy/pages.json ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -7768,9 +7815,9 @@ function normalizeComponent (
 
 /***/ }),
 /* 11 */
-/*!*************************************************!*\
-  !*** /Users/haier/Documents/bhy/store/index.js ***!
-  \*************************************************/
+/*!***********************************************************!*\
+  !*** /Users/guanzhihao/Documents/code/bhy/store/index.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8741,9 +8788,9 @@ var index_esm = {
 
 /***/ }),
 /* 13 */
-/*!*************************************************!*\
-  !*** /Users/haier/Documents/bhy/store/store.js ***!
-  \*************************************************/
+/*!***********************************************************!*\
+  !*** /Users/guanzhihao/Documents/code/bhy/store/store.js ***!
+  \***********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8843,7 +8890,7 @@ var index_esm = {
                       resolve(true);
                     }
                   }));case 3:return _context2.abrupt("return", _context2.sent);case 4:case "end":return _context2.stop();}}}, _callee2);}));function isLogin(_x2) {return _isLogin.apply(this, arguments);}return isLogin;}() } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"], __webpack_require__(/*! ./../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"], __webpack_require__(/*! ./../../../../../../Applications/HBuilderX.app/Contents/HBuilderX/plugins/uniapp-cli/node_modules/webpack/buildin/global.js */ 3)))
 
 /***/ }),
 /* 14 */
@@ -9635,20 +9682,20 @@ if (hadRuntime) {
 
 /***/ }),
 /* 17 */
-/*!****************************************************************!*\
-  !*** /Users/haier/Documents/bhy/common/vmeitime-http/index.js ***!
-  \****************************************************************/
+/*!**************************************************************************!*\
+  !*** /Users/guanzhihao/Documents/code/bhy/common/vmeitime-http/index.js ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = exports.AddQianShou = exports.GetRenZhengInfo = exports.GetVideoUrl = exports.GetQianFengList = exports.CompleteOrder = exports.WeChatPay_work = exports.GetOpenId_work = exports.AddQianfeng = exports.FeedBack = exports.getMessageList = exports.getOrderList = exports.login = exports.picUrl = exports.test = void 0;var _interface = _interopRequireDefault(__webpack_require__(/*! ./interface */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = exports.GetOrderNum = exports.AddQianShou = exports.GetRenZhengInfo = exports.GetVideoUrl = exports.GetQianFengList = exports.CompleteOrder = exports.WeChatPay_work = exports.GetOpenId_work = exports.AddQianfeng = exports.FeedBack = exports.getMessageList = exports.getOrderList = exports.login = exports.picUrl = exports.test = void 0;var _interface = _interopRequireDefault(__webpack_require__(/*! ./interface */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 将业务所有接口统一起来便于维护
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * 将业务所有接口统一起来便于维护
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * 如果项目很大可以将 url 独立成文件，接口分成不同的模块
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            * 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */
 
 // 单独导出(测试接口) import {test} from '@/common/vmeitime-http/'
 var test = function test(data) {
@@ -9770,9 +9817,17 @@ var AddQianShou = function AddQianShou(data) {
     data: data
     // handle:true
   });
+};exports.AddQianShou = AddQianShou;
+var GetOrderNum = function GetOrderNum(data) {
+  return _interface.default.request({
+    url: 'GetOrderNum',
+    method: 'POST',
+    data: data
+    // handle:true
+  });
 };
 // 默认全部导出  import api from '@/common/vmeitime-http/'
-exports.AddQianShou = AddQianShou;var _default = {
+exports.GetOrderNum = GetOrderNum;var _default = {
   login: login,
   getOrderList: getOrderList,
   getMessageList: getMessageList,
@@ -9785,13 +9840,14 @@ exports.AddQianShou = AddQianShou;var _default = {
   GetQianFengList: GetQianFengList,
   GetVideoUrl: GetVideoUrl,
   GetRenZhengInfo: GetRenZhengInfo,
-  AddQianShou: AddQianShou };exports.default = _default;
+  AddQianShou: AddQianShou,
+  GetOrderNum: GetOrderNum };exports.default = _default;
 
 /***/ }),
 /* 18 */
-/*!********************************************************************!*\
-  !*** /Users/haier/Documents/bhy/common/vmeitime-http/interface.js ***!
-  \********************************************************************/
+/*!******************************************************************************!*\
+  !*** /Users/guanzhihao/Documents/code/bhy/common/vmeitime-http/interface.js ***!
+  \******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

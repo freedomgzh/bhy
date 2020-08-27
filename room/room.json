@@ -3,5 +3,7 @@
     "trtc-room": "/components/trtc-room/trtc-room"
   },
   "navigationStyle": "custom",
-  "disableScroll": true
+  "disableScroll": true,
+  "navigationBarTitleText": "通话"
+
 }
